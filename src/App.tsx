@@ -1,25 +1,38 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Box, createTheme, makeStyles, ThemeProvider } from "@mui/material";
+import { useState } from "react";
+import Landing from "./pages/Landing";
+
+const theme = createTheme({
+  palette: {
+    mode: "dark",
+    primary: {
+      main: "#d32f2f",
+    },
+  },
+});
 
 function App() {
+  const [bg, setBg] = useState<string>(null);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ThemeProvider theme={theme}>
+      <Box
+        id="App"
+        p={3}
+        minHeight="100vh"
+        sx={
+          bg
+            ? {
+                backgroundImage: `linear-gradient(to right, black 30%, transparent), url(${bg})`,
+                backgroundSize: "cover",
+                backgroundPositionX: "0px, 200px",
+              }
+            : {}
+        }
+      >
+        <Landing setBg={setBg} />
+      </Box>
+    </ThemeProvider>
   );
 }
 
