@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
   Container,
   Box,
@@ -17,6 +17,7 @@ import { Formik, Form, Field } from "formik";
 import { Email as EmailIcon, Lock as LockIcon } from "@mui/icons-material";
 import { styled } from "@mui/system";
 import emotion from "@emotion/styled";
+import { AppContext } from "../App";
 
 const CustomTextField = (props: any) => {
   const { field, form, meta, label, ...rest } = props;
@@ -32,12 +33,7 @@ const CustomTextField = (props: any) => {
           {label}
         </FormLabel>
       )}
-      <TextField
-        {...field}
-        {...rest}
-        error={Boolean(touched && error)}
-        helperText={error}
-      />
+      <TextField {...field} {...rest} error={Boolean(touched && error)} helperText={error} />
     </>
   );
 };
@@ -58,21 +54,17 @@ const SocialIcon = emotion.img`
 const initialValues = { username: "", password: "" };
 
 const SignIn: React.FC = () => {
+  const { resume } = useContext(AppContext);
+
   const handleSubmit = (values) => {
     alert(`Submit form: ${JSON.stringify(values)}`);
+    resume();
   };
 
   return (
     <div className="App">
-      <Container
-        maxWidth="sm"
-        disableGutters
-        sx={{ minHeight: "100vh", display: "flex" }}
-      >
-        <Paper
-          elevation={5}
-          sx={{ maxWidth: "400px", margin: "auto auto", borderRadius: ".5em" }}
-        >
+      <Container maxWidth="sm" disableGutters sx={{ minHeight: "100vh", display: "flex" }}>
+        <Paper elevation={5} sx={{ maxWidth: "400px", margin: "auto auto", borderRadius: ".5em" }}>
           <Box p={4}>
             <Box display="flex" justifyContent="space-evenly">
               <SocialIcon alt="facebook icon" src="icons/fb.png" />
@@ -104,9 +96,7 @@ const SignIn: React.FC = () => {
                           </InputAdornment>
                         ),
                       }}
-                      validate={(value) =>
-                        value && value.length < 5 && "name too short"
-                      }
+                      validate={(value) => value && value.length < 5 && "name too short"}
                     />
                   </Box>
 
@@ -128,24 +118,14 @@ const SignIn: React.FC = () => {
                           </InputAdornment>
                         ),
                       }}
-                      validate={(value) =>
-                        value && value.length < 5 && "Password too short"
-                      }
+                      validate={(value) => value && value.length < 5 && "Password too short"}
                     />
                   </Box>
 
-                  <FormControlLabel
-                    control={<Checkbox />}
-                    label="Remember me for a week"
-                  />
+                  <FormControlLabel control={<Checkbox />} label="Remember me for a week" />
 
                   <Box my={2}>
-                    <StyledButton
-                      fullWidth
-                      type="submit"
-                      color="primary"
-                      variant="contained"
-                    >
+                    <StyledButton fullWidth type="submit" color="primary" variant="contained">
                       Log In
                     </StyledButton>
                   </Box>

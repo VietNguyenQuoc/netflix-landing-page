@@ -1,6 +1,8 @@
 import { Box, createTheme, makeStyles, ThemeProvider } from "@mui/material";
-import { useState } from "react";
+import React, { createContext, useState } from "react";
 import Landing from "./pages/Landing";
+import SignIn from "./pages/SignIn";
+import "pure-react-carousel/dist/react-carousel.es.css";
 
 const theme = createTheme({
   palette: {
@@ -11,14 +13,47 @@ const theme = createTheme({
   },
 });
 
+export enum PageId {
+  SignIn = "signIn",
+  Landing = "landing",
+}
+
+const Pages: Record<PageId, React.FC> = {
+  [PageId.SignIn]: SignIn,
+  [PageId.Landing]: Landing,
+};
+
+interface AppContextProps {
+  setBg: React.Dispatch<React.SetStateAction<string>>;
+  setPage: React.Dispatch<React.SetStateAction<PageId>>;
+  redirect: (pageId: PageId) => void;
+  resume: () => void;
+}
+
+export const AppContext = createContext<AppContextProps>(null);
+
 function App() {
   const [bg, setBg] = useState<string>(null);
+  const [page, setPage] = useState<PageId>(PageId.Landing);
+  const [pausePage, setPausePage] = useState<PageId>(null);
+  const PageComponent = Pages[page];
+
+  const redirect = (pageId: PageId): void => {
+    setPausePage(page);
+    setPage(pageId);
+  };
+
+  const resume = () => {
+    setPausePage(null);
+    setPage(pausePage);
+  };
 
   return (
     <ThemeProvider theme={theme}>
       <Box
         id="App"
-        p={3}
+        py={3}
+        px={6}
         minHeight="100vh"
         sx={
           bg
@@ -30,7 +65,9 @@ function App() {
             : {}
         }
       >
-        <Landing setBg={setBg} />
+        <AppContext.Provider value={{ setBg, setPage, redirect, resume }}>
+          <PageComponent />
+        </AppContext.Provider>
       </Box>
     </ThemeProvider>
   );

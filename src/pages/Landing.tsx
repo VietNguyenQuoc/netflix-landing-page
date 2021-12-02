@@ -1,8 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { PlayCircle } from "@mui/icons-material";
-import { Container, Box, Typography, Button, BoxProps, CssBaseline } from "@mui/material";
+import { Box, Typography, Button, BoxProps, CssBaseline } from "@mui/material";
 import { movies } from "../data";
 import NavBar from "./components/NavBar";
+import { AppContext } from "../App";
+import RateBadge from "./components/RateBadge";
+import PopularCarousel from "./components/PopularCarousel";
 
 const FlexBox: React.FC<BoxProps> = ({ children, ...props }) => {
   return (
@@ -15,7 +18,8 @@ const FlexBox: React.FC<BoxProps> = ({ children, ...props }) => {
   );
 };
 
-const Landing: React.FC<{ setBg: React.Dispatch<React.SetStateAction<string>> }> = ({ setBg }) => {
+const Landing: React.FC = () => {
+  const { setBg } = useContext(AppContext);
   const { genres, name, description, director, episodes, image, rate, year } = movies[0];
 
   const getSeasons = () => {
@@ -30,11 +34,11 @@ const Landing: React.FC<{ setBg: React.Dispatch<React.SetStateAction<string>> }>
   }, [image]);
 
   return (
-    <Container>
+    <Box>
       <CssBaseline />
       <NavBar />
 
-      <Box id="movie-info" width="50%" my={6}>
+      <Box id="movie-info" maxWidth="50%" my={6}>
         <FlexBox columnGap={1}>
           {genres.map((genre) => (
             <>
@@ -79,7 +83,9 @@ const Landing: React.FC<{ setBg: React.Dispatch<React.SetStateAction<string>> }>
           All episodes
         </Button>
       </Box>
-    </Container>
+      <RateBadge label={rate} />
+      <PopularCarousel />
+    </Box>
   );
 };
 

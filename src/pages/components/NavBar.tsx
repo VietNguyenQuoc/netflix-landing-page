@@ -1,19 +1,22 @@
 import { Avatar, Grid, Icon, Link, LinkProps, List, ListItem, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import moment from "moment";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import emotion from "@emotion/styled";
 import { KeyboardArrowDown, SearchOutlined } from "@mui/icons-material";
+import { AppContext, PageId } from "../../App";
 
 const StyledList = emotion(List)({
   display: "flex",
   padding: 0,
-  justifyContent: "space-around",
+  justifyContent: "center",
+  columnGap: "4em",
 });
 
 const StyledListItem = emotion(ListItem)({
   justifyContent: "center",
   padding: 0,
+  width: "inherit",
 });
 
 interface StyledLinkProps extends LinkProps {
@@ -54,14 +57,19 @@ const navItems = [
 
 const NavBar: React.FC = () => {
   const [selected, setSelected] = useState("home");
+  const { redirect } = useContext(AppContext);
 
   return (
     <Grid container>
       <Grid item xs={3}>
-        <Box display="flex" gap={2}>
+        <Box display="flex" gap={1}>
           <img src="icons/netflix.png" height="31px" width="100px" />
-          <Typography>|</Typography>
-          <Typography variant="caption">{getFormattedDate()}</Typography>
+          <Typography fontSize={12} alignSelf="center">
+            |
+          </Typography>
+          <Typography variant="caption" fontSize={12} alignSelf="center">
+            {getFormattedDate()}
+          </Typography>
         </Box>
       </Grid>
 
@@ -103,6 +111,7 @@ const NavBar: React.FC = () => {
             <Avatar
               variant="rounded"
               src="icons/my.jpeg"
+              onClick={() => redirect(PageId.SignIn)}
               sx={{ position: "relative", top: "-.5rem" }}
             />
           </Box>
