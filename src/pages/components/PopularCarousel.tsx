@@ -41,13 +41,21 @@ const movies = [
   },
 ];
 
-const StyledIconButton = styled(IconButton)({
-  border: "1px solid white",
-  fontSize: "1rem",
-  px: 0.6,
-  py: 0,
-  lineHeight: 0,
-});
+const StyledIconButton = styled(IconButton)(
+  {
+    fontSize: "1rem",
+    lineHeight: 0,
+    "> svg": {
+      fontSize: "1rem",
+    },
+  },
+  (props) => {
+    console.log(props);
+    return {
+      border: `1px solid ${props.disabled ? "gray" : "white"}`,
+    };
+  }
+);
 
 const StyledImage = styled("img")({
   width: "120px",
@@ -74,7 +82,7 @@ const PopularCarousel: React.FC = () => {
           Popular this week
         </Typography>
         <Box id="carousel-btn-group" sx={{ display: "flex", top: 0, right: 0, gap: 1 }}>
-          <StyledIconButton>
+          <StyledIconButton disabled>
             <NavigateBeforeOutlined />
           </StyledIconButton>
           <StyledIconButton>
