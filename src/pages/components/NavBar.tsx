@@ -5,6 +5,7 @@ import React, { useContext, useState } from "react";
 import emotion from "@emotion/styled";
 import { KeyboardArrowDown, SearchOutlined } from "@mui/icons-material";
 import { AppContext, PageId } from "../../App";
+import useTimer from "../../hooks/useTimer";
 
 const StyledList = emotion(List)({
   display: "flex",
@@ -46,7 +47,8 @@ const StyledLink = emotion(Link)<StyledLinkProps>(
   })
 );
 
-const getFormattedDate = () => moment().format("dddd, MMMM D • hh:mm");
+const getFormattedDate = (time: moment.Moment | Date) =>
+  moment(time).format("dddd, MMMM D • hh:mm");
 
 const navItems = [
   { name: "home", label: "Home" },
@@ -58,6 +60,7 @@ const navItems = [
 const NavBar: React.FC = () => {
   const [selected, setSelected] = useState("home");
   const { redirect } = useContext(AppContext);
+  const time = useTimer(1000 * 60); // update every minute
 
   return (
     <Grid container>
@@ -68,7 +71,7 @@ const NavBar: React.FC = () => {
             |
           </Typography>
           <Typography variant="caption" fontSize={12} alignSelf="center">
-            {getFormattedDate()}
+            {getFormattedDate(time)}
           </Typography>
         </Box>
       </Grid>
